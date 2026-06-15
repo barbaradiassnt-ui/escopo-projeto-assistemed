@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AssisteMed — Plano de Ação Jun/2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;700;800&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --navy:#0D1F45;
+  --navy2:#162B5C;
+  --lime:#6DC044;
+  --lime-d:#4E9030;
+  --teal:#0077A8;
+  --teal-l:#E0F4FB;
+  --teal-d:#005F87;
+  --amber:#C25B0A;
+  --amber-l:#FEF0E7;
+  --emerald:#167A3B;
+  --emerald-l:#E3F5EB;
+  --slate:#F1F4FA;
+  --border:#DDE3EE;
+  --text:#1A2742;
+  --muted:#6B7A99;
+  --white:#FFFFFF;
+  --pill-done:#DCFCE7; --pill-done-t:#14803C;
+  --pill-doing:#FEF3C7; --pill-doing-t:#A85C07;
+  --pill-plan:#DBEAFE; --pill-plan-t:#1E4FD8;
+  --pill-rec:#F3E8FF;  --pill-rec-t:#6D28D9;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--slate);color:var(--text);min-height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--navy);
+  height:60px;padding:0 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+  box-shadow:0 2px 20px rgba(0,0,0,.35);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-badge{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--lime);display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;color:var(--navy);
+}
+.brand-name{color:#fff;font-weight:700;font-size:15px;letter-spacing:-.3px}
+.brand-name em{color:var(--lime);font-style:normal}
+.topbar-meta{text-align:right;font-size:11px;color:#8A9BBF;line-height:1.6}
+.topbar-meta strong{color:#fff;display:block;font-size:12px}
+
+/* ── NAV ── */
+.nav{
+  background:var(--navy2);
+  display:flex;padding:0 48px;gap:2px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  overflow-x:auto;
+}
+.nav::-webkit-scrollbar{display:none}
+.tab{
+  padding:11px 24px;
+  font-size:12.5px;font-weight:600;color:#7A8FB8;
+  cursor:pointer;border-bottom:3px solid transparent;
+  transition:.18s;display:flex;align-items:center;gap:8px;white-space:nowrap;
+  user-select:none;
+}
+.tab:hover{color:#C8D8FF}
+.tab.on{color:#fff;border-bottom-color:var(--lime)}
+.tab .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── MAIN ── */
+.main{padding:32px 48px 72px;max-width:1440px;margin:0 auto}
+.panel{display:none;animation:fadeUp .22s ease}
+.panel.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ── OVERVIEW HERO ── */
+.hero{
+  background:linear-gradient(130deg,var(--navy) 0%,var(--navy2) 55%,#1B3B80 100%);
+  border-radius:16px;padding:40px 48px;color:#fff;
+  margin-bottom:28px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;right:-60px;bottom:-60px;
+  width:320px;height:320px;border-radius:50%;
+  background:rgba(109,192,68,.06);pointer-events:none;
+}
+.hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--lime);margin-bottom:10px}
+.hero-h{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;line-height:1.2;margin-bottom:6px}
+.hero-sub{font-size:13px;color:#8A9BBF}
+
+/* ── META CARDS ── */
+.meta-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.meta-card{
+  background:#fff;border-radius:14px;padding:24px 26px;
+  border-top:5px solid;box-shadow:0 2px 10px rgba(0,0,0,.07);
+}
+.meta-card.teal{border-color:var(--teal)}
+.meta-card.amber{border-color:var(--amber)}
+.meta-card.emerald{border-color:var(--emerald)}
+.mc-icon{font-size:26px;margin-bottom:10px}
+.mc-eyebrow{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.mc-val{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;line-height:1;margin-bottom:4px}
+.meta-card.teal .mc-val{color:var(--teal)}
+.meta-card.amber .mc-val{color:var(--amber)}
+.meta-card.emerald .mc-val{color:var(--emerald)}
+.mc-desc{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.bar-row{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px;font-weight:600}
+.bar-bg{height:5px;background:var(--border);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px}
+.meta-card.teal .bar-fill{background:var(--teal)}
+.meta-card.amber .bar-fill{background:var(--amber)}
+.meta-card.emerald .bar-fill{background:var(--emerald)}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat{background:#fff;border-radius:11px;padding:18px 22px;text-align:center;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+.stat-n{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;line-height:1;margin-bottom:4px}
+.stat-l{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.5px}
+.stat.s-done .stat-n{color:#14803C}
+.stat.s-doing .stat-n{color:#A85C07}
+.stat.s-plan .stat-n{color:#1E4FD8}
+.stat.s-total .stat-n{color:var(--navy)}
+
+/* ── SECTION DIVIDER ── */
+.divider{
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin:28px 0 16px;
+  display:flex;align-items:center;gap:12px;
+}
+.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── HIGHLIGHT GRID ── */
+.hl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.hl-card{
+  background:#fff;border-radius:11px;padding:18px 22px;
+  box-shadow:0 1px 5px rgba(0,0,0,.06);border-left:4px solid;
+}
+.hl-card.done{border-color:#14803C}
+.hl-card.warn{border-color:#A85C07}
+.hl-card.next{border-color:var(--teal)}
+.hl-label{font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}
+.hl-card.done .hl-label{color:#14803C}
+.hl-card.warn .hl-label{color:#A85C07}
+.hl-card.next .hl-label{color:var(--teal)}
+.hl-title{font-weight:700;font-size:13px;margin-bottom:5px}
+.hl-text{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ── FRENTE HEADER ── */
+.fh{
+  border-radius:14px;padding:30px 36px;color:#fff;
+  margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;
+}
+.fh.teal{background:linear-gradient(130deg,var(--teal),var(--teal-d))}
+.fh.amber{background:linear-gradient(130deg,var(--amber),#8B3D04)}
+.fh.emerald{background:linear-gradient(130deg,var(--emerald),#0D4E25)}
+.fh-l .fh-icon{font-size:32px;margin-bottom:8px}
+.fh-l .fh-title{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;margin-bottom:4px}
+.fh-l .fh-sub{font-size:12px;opacity:.8}
+.fh-r{display:flex;gap:12px;flex-shrink:0}
+.fh-stat{
+  background:rgba(255,255,255,.15);border-radius:10px;
+  padding:12px 16px;text-align:center;min-width:72px;
+}
+.fh-stat-n{font-size:22px;font-weight:800;line-height:1}
+.fh-stat-l{font-size:9px;opacity:.7;font-weight:700;letter-spacing:.5px;margin-top:2px}
+
+/* ── CARDS ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:8px}
+.card{
+  background:#fff;border-radius:12px;
+  box-shadow:0 1px 8px rgba(0,0,0,.08);overflow:hidden;
+  transition:transform .15s,box-shadow .15s;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(0,0,0,.11)}
+.card-top-bar{height:4px}
+.ctb-done{background:#14803C}
+.ctb-doing{background:#D97706}
+.ctb-plan{background:#2563EB}
+.ctb-rec{background:#7C3AED}
+.card-body{padding:18px 20px 14px}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.card-title{font-weight:700;font-size:13.5px;line-height:1.35;flex:1}
+.pill{font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.pill-done{background:var(--pill-done);color:var(--pill-done-t)}
+.pill-doing{background:var(--pill-doing);color:var(--pill-doing-t)}
+.pill-plan{background:var(--pill-plan);color:var(--pill-plan-t)}
+.pill-rec{background:var(--pill-rec);color:var(--pill-rec-t)}
+.card-desc{font-size:11.5px;color:var(--muted);line-height:1.65;margin-bottom:12px}
+.card-obs{
+  margin:0 20px 14px;
+  background:#FFFBEB;border-left:3px solid #FCD34D;
+  border-radius:0 6px 6px 0;padding:8px 12px;
+  font-size:11px;color:#78350F;line-height:1.6;
+}
+.card-obs strong{display:block;font-size:9px;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px;color:#92400E}
+.card-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;background:var(--slate);
+  border-top:1px solid var(--border);gap:8px;flex-wrap:wrap;
+}
+.cf-resp{font-size:10.5px;font-weight:600}
+.cf-resp span{color:var(--muted);font-weight:400}
+.cf-right{display:flex;align-items:center;gap:8px}
+.cf-date{font-size:10.5px;color:var(--muted)}
+.cf-prio{font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:99px;background:#FEE2E2;color:#B91C1C}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .meta-row,.stat-row{grid-template-columns:1fr}
+  .hl-grid{grid-template-columns:1fr}
+  .fh-r{display:none}
+  .main{padding:20px 16px 60px}
+  .topbar,.nav{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-badge">A</div>
+    <div class="brand-name">Assiste<em>Med</em></div>
+  </div>
+  <div class="topbar-meta">
+    <strong>Plano de Ação — Junho 2026</strong>
+    Apresentação para Diretoria · Coord. Carla Reis
+  </div>
+</div>
+
+<div class="nav">
+  <div class="tab on" onclick="go('overview',this)">📋 Visão Geral</div>
+  <div class="tab" onclick="go('vidas',this)"><div class="dot" style="background:var(--teal)"></div>Vidas — Venda de Planos</div>
+  <div class="tab" onclick="go('ocup',this)"><div class="dot" style="background:var(--amber)"></div>Ocupação</div>
+  <div class="tab" onclick="go('cross',this)"><div class="dot" style="background:var(--emerald)"></div>Cross Selling</div>
+</div>
+
+<div class="main">
+
+<!-- ════════════════ VISÃO GERAL ════════════════ -->
+<div class="panel on" id="p-overview">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Plano de Ação Estratégico · Junho 2026</div>
+    <div class="hero-h">3 Frentes. 26 Iniciativas.<br>Foco em crescimento e faturamento.</div>
+    <div class="hero-sub">Vidas · Ocupação · Cross Selling — Dados do plano atualizado pela equipe</div>
+  </div>
+
+  <div class="meta-row">
+    <div class="meta-card teal">
+      <div class="mc-icon">🫀</div>
+      <div class="mc-eyebrow">Vidas — Venda de Planos</div>
+      <div class="mc-val">2.700</div>
+      <div class="mc-desc">Meta de vidas ativas · Base atual ~2.536 · +164 vidas</div>
+      <div class="bar-row"><span>Progresso estimado</span><span style="color:var(--teal);font-weight:700">~65%</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:65%"></div></div>
+    </div>
+    <div class="meta-card amber">
+      <div class="mc-icon">📅</div>
+      <div class="mc-eyebrow">Ocupação</div>
+      <div class="mc-val">&gt; 80%</div>
+      <div class="mc-desc">Meta de taxa de ocupação · Atual ~68% · +12% faturamento</div>
+      <div class="bar-row"><span>Progresso estimado</span><span style="color:var(--amber);font-weight:700">~55%</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div>
+    </div>
+    <div class="meta-card emerald">
+      <div class="mc-icon">🧪</div>
+      <div class="mc-eyebrow">Cross Selling</div>
+      <div class="mc-val">1.050</div>
+      <div class="mc-desc">Meta de exames · 2025 realizado: 951 · +10% faturamento</div>
+      <div class="bar-row"><span>Progresso estimado</span><span style="color:var(--emerald);font-weight:700">~50%</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat s-done"><div class="stat-n">7</div><div class="stat-l">✅ Concluídas / Recorrentes</div></div>
+    <div class="stat s-doing"><div class="stat-n">10</div><div class="stat-l">🔄 Em Andamento</div></div>
+    <div class="stat s-plan"><div class="stat-n">9</div><div class="stat-l">📌 Planejadas</div></div>
+    <div class="stat s-total"><div class="stat-n">26</div><div class="stat-l">🎯 Total de Iniciativas</div></div>
+  </div>
+
+  <div class="divider">Destaques do período</div>
+  <div class="hl-grid">
+    <div class="hl-card done">
+      <div class="hl-label">✅ Conquista — E-mails Ocupacional</div>
+      <div class="hl-title">1.833 e-mails disparados · 678 abertos · 14 leads</div>
+      <div class="hl-text">Planilha A (1.424 env / 569 abertos → 10 leads, 4%). Planilha B (409 env / 109 abertos → 4 leads, 9%). Base Ocupacional ativada com sucesso.</div>
+    </div>
+    <div class="hl-card done">
+      <div class="hl-label">✅ Conquista — Régua de Comunicação</div>
+      <div class="hl-title">SMS Plenitude, Boas-Vindas e reunião semanal SDR ativos</div>
+      <div class="hl-text">Cartão Plenitude: SMS via SOC disparado para antigos clientes. Boas-vindas para admitidos estabelecido com Narzi/Bárbara. Reunião semanal com Stefanie funcionando.</div>
+    </div>
+    <div class="hl-card warn">
+      <div class="hl-label">⚠️ Atenção — Leads do Site parados</div>
+      <div class="hl-title">Nenhum lead desde 22/05 — campanha sem retorno</div>
+      <div class="hl-text">Aguardando retorno da Elaine (UHURU). Campanha em tráfego porém sem conversão. Ação urgente necessária para retomar fluxo.</div>
+    </div>
+    <div class="hl-card next">
+      <div class="hl-label">🚀 Próximo passo — Recepcionista Virtual</div>
+      <div class="hl-title">Nina (Evolution API) — Escopo criado, aguarda comitê</div>
+      <div class="hl-text">App via Remix Nina API para confirmação de consulta, NPS e agendamento. Bárbara e Gabriel lideram. Solicitar suporte do Comitê de Inovação.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════ VIDAS ════════════════ -->
+<div class="panel" id="p-vidas">
+
+  <div class="fh teal">
+    <div class="fh-l">
+      <div class="fh-icon">🫀</div>
+      <div class="fh-title">Vidas — Venda de Planos</div>
+      <div class="fh-sub">Meta: 2.536 → 2.700 vidas · +2mil/mês via planos empresariais · Plano Sem Pacto: 635 → 800</div>
+    </div>
+    <div class="fh-r">
+      <div class="fh-stat"><div class="fh-stat-n">15</div><div class="fh-stat-l">INICIATIVAS</div></div>
+      <div class="fh-stat"><div class="fh-stat-n">5</div><div class="fh-stat-l">CONCLUÍDAS</div></div>
+      <div class="fh-stat"><div class="fh-stat-n">8</div><div class="fh-stat-l">PLANEJADAS</div></div>
+    </div>
+  </div>
+
+  <div class="divider">Concluídas e em andamento</div>
+  <div class="cards" id="cv-ativas"></div>
+
+  <div class="divider">Planejadas — próximos passos</div>
+  <div class="cards" id="cv-plan"></div>
+
+</div>
+
+<!-- ════════════════ OCUPAÇÃO ════════════════ -->
+<div class="panel" id="p-ocup">
+
+  <div class="fh amber">
+    <div class="fh-l">
+      <div class="fh-icon">📅</div>
+      <div class="fh-title">Ocupação</div>
+      <div class="fh-sub">Taxa atual ~68% · Meta 2026: &gt;80% · Impacto estimado: +12% no faturamento</div>
+    </div>
+    <div class="fh-r">
+      <div class="fh-stat"><div class="fh-stat-n">7</div><div class="fh-stat-l">INICIATIVAS</div></div>
+      <div class="fh-stat"><div class="fh-stat-n">2</div><div class="fh-stat-l">CONCLUÍDAS</div></div>
+      <div class="fh-stat"><div class="fh-stat-n">3</div><div class="fh-stat-l">EM ANDAMENTO</div></div>
+    </div>
+  </div>
+
+  <div class="divider">Concluídas e em andamento</div>
+  <div class="cards" id="co-ativas"></div>
+
+  <div class="divider">Planejadas — próximos passos</div>
+  <div class="cards" id="co-plan"></div>
+
+</div>
+
+<!-- ════════════════ CROSS SELLING ════════════════ -->
+<div class="panel" id="p-cross">
+
+  <div class="fh emerald">
+    <div class="fh-l">
+      <div class="fh-icon">🧪</div>
+      <div class="fh-title">Cross Selling</div>
+      <div class="fh-sub">Meta 2026: 1.050 exames · 2025 realizado: 951 · +10% no faturamento</div>
+    </div>
+    <div class="fh-r">
+      <div class="fh-stat"><div class="fh-stat-n">4</div><div class="fh-stat-l">INICIATIVAS</div></div>
+      <div class="fh-stat"><div class="fh-stat-n">4</div><div class="fh-stat-l">EM ANDAMENTO</div></div>
+      <div class="fh-stat"><div class="fh-stat-n">🔴</div><div class="fh-stat-l">ALTA PRIOR.</div></div>
+    </div>
+  </div>
+
+  <div class="divider">Iniciativas em andamento</div>
+  <div class="cards" id="cx-all"></div>
+
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ─── DADOS EXTRAÍDOS EXCLUSIVAMENTE DO ARQUIVO plano_de_ação_062026.xlsx ───
+
+const VIDAS_ATIVAS = [
+  {
+    titulo: "Cartão Plenitude — SMS SOC",
+    desc: "Oferta de 1ª mensalidade grátis conforme padrão plataforma Stripe. SMS enviados via SOC para antigos clientes.",
+    resp: "Bárbara Almeida",
+    prazo: "26/05/2026",
+    status: "done", label: "✅ Concluído",
+    obs: "Enviado SMS/SOC para antigos clientes."
+  },
+  {
+    titulo: "Busca Ativa — Admitidos base SOC Ocupacional",
+    desc: "Buscar na base Ocupacional colaboradores não ativados como clientes AssisteMed (SM, CAC, Normandy).",
+    resp: "Bárbara / Isabela",
+    prazo: "25/05/2026",
+    status: "rec", label: "✅ Recorrente",
+    obs: "Bárbara fez nas férias da Isabela. Orientar Isabela a exportar lista; e-mail / mensagem."
+  },
+  {
+    titulo: "Acompanhamento Comercial Semanal com SDR",
+    desc: "Reunião semanal de acompanhamento comercial com a SDR Stefanie.",
+    resp: "Stefanie / Bárbara",
+    prazo: "Toda segunda",
+    status: "done", label: "✅ Concluído",
+    obs: "Rito já estabelecido. Avaliar: incluí-la para fazer vendas e comissionar?"
+  },
+  {
+    titulo: "Leads Base Ocupacional — Planilha A (5 a 50 vidas)",
+    desc: "Pesquisa Plano/NR1: 1.424 enviados · 569 abertos · 40% sem plano = 230 empresas.",
+    resp: "Uhuru / Bárbara",
+    prazo: "31/05/2026",
+    status: "done", label: "✅ Concluído",
+    obs: "40% Sem Plano (230 empresas) = 4% de conversão → 10 leads gerados."
+  },
+  {
+    titulo: "Leads Base Ocupacional — Planilha B (a partir de 51 vidas)",
+    desc: "409 enviados · 109 abertos · 40% sem plano = 45 empresas.",
+    resp: "Uhuru / Bárbara",
+    prazo: "31/05/2026",
+    status: "done", label: "✅ Concluído",
+    obs: "40% Sem Plano (45 empresas) = 9% de conversão → 4 leads gerados."
+  },
+  {
+    titulo: "Equipe AssisteMed × Ocupacional — Integração Operacional",
+    desc: "Paula fica manhã e tarde na Ocupacional. Sandra absorve caixinha e ponto (melhoria digital). Bárbara faz o fechamento.",
+    resp: "Bárbara / Equipe",
+    prazo: "Recorrente",
+    status: "done", label: "✅ Concluído",
+    obs: "Unificar demanda administrativa em uma única pessoa. Recepção e atendimento direcionando a recepcionistas."
+  },
+  {
+    titulo: "Base Antiga — Reativação de Inativos / Cancelados",
+    desc: "Buscar antigos clientes inativos/cancelados. Régua de cobrança + proposta de retorno.",
+    resp: "Bárbara / Equipe (M. Fernanda)",
+    prazo: "30/06/2026",
+    status: "doing", label: "🔄 Em andamento",
+    obs: "Fernanda: marcar treinamento de equipe (script). Bárbara: levantar lista."
+  },
+  {
+    titulo: "NPS Busca Ativa — Indicação com Mensalidade Grátis",
+    desc: "Pesquisa NPS para clientes com resultado POSITIVO + oferta de 1ª mensalidade grátis por indicação.",
+    resp: "Equipe AssisteMed (Narzi)",
+    prazo: "30/06/2026",
+    status: "plan", label: "📌 Planejado",
+    obs: "Bárbara cria lista e status. Duda envia mensagem. Dividir entre equipe — enviar gradativamente."
+  },
+];
+
+const VIDAS_PLAN = [
+  {
+    titulo: "Leads & Site — Conferir Campanha em Tráfego",
+    desc: "Verificar campanha que está sendo trafegada e não está gerando leads. Último lead: 22/05.",
+    resp: "UHURU / Bárbara",
+    prazo: "30/06/2026",
+    status: "plan", label: "📌 Planejado",
+    obs: "Esperando retorno da Elaine. Não estão chegando leads. Urgente!"
+  },
+  {
+    titulo: "Plumes AssisteMed — Filtro Plano de Saúde",
+    desc: "Filtrar novos clientes no Plumes sobre plano de saúde e enviar proposta personalizada.",
+    resp: "Comercial / Bárbara",
+    prazo: "25/08/2026",
+    status: "plan", label: "📌 Planejado",
+    obs: "Sthefani solicitou. Aguarda atualização de fornecedor."
+  },
+  {
+    titulo: "Brecha Legislação / CCT — Plano Assistencial",
+    desc: "Buscar setores com obrigação de oferecer plano de saúde que possam substituir pelo plano AssisteMed (Bares, Restaurantes, Hotel).",
+    resp: "M. Fernanda / Bárbara",
+    prazo: "A definir",
+    status: "plan", label: "📌 Planejado",
+    obs: "Clube de benefícios, cartão de benefício como redução de custo para o empregador."
+  },
+  {
+    titulo: "Associações Maiores — Parcerias B2B",
+    desc: "Parcerias para oferecer planos aos associados: Sistemas S (SENAI, SENAR), IFMG, Assoc. Bares e Restaurantes, FIEMG, PUC, Assoc. Médica.",
+    resp: "M. Fernanda / Bárbara",
+    prazo: "A definir",
+    status: "plan", label: "📌 Planejado",
+    obs: "Cristiano Ampliar e outros. Avaliar modelo de comissão."
+  },
+  {
+    titulo: "Valor Adicional Percapita",
+    desc: "Avaliar cobrança de valor adicional por vida pela AssisteMed. Referência: Plano Quantum.",
+    resp: "Bárbara (M. Fernanda)",
+    prazo: "A definir",
+    status: "plan", label: "📌 Planejado",
+    obs: "Avaliar com Diretoria e Financeiro."
+  },
+  {
+    titulo: "Plano B2B por Cartão de Crédito",
+    desc: "Facilitar forma de pagamento recorrente via cartão e incluir botão de compra no futuro.",
+    resp: "Bárbara (M. Fernanda)",
+    prazo: "A definir",
+    status: "plan", label: "📌 Planejado",
+    obs: "Avaliar escalonagem com Isabela."
+  },
+  {
+    titulo: "TikTok — Canal Plenitude B2C e B2B",
+    desc: "Levar o plano Plenitude (B2C) e planos B2B em recorrência no cartão de crédito para o TikTok.",
+    resp: "Bárbara (M. Fernanda)",
+    prazo: "A definir",
+    status: "plan", label: "📌 Planejado",
+    obs: "Abrir conta Tello na Uhuru. Avaliar orçamento de produção."
+  },
+];
+
+const OCUP_ATIVAS = [
+  {
+    titulo: "Boas-Vindas Marco Zero — Admitidos",
+    desc: "Enviar mensagem de boas-vindas para todos os admitidos no sistema. Analisar recentes, criar lista e enviar para Narzi.",
+    resp: "Narzi / Bárbara",
+    prazo: "Recorrente",
+    status: "done", label: "✅ Concluído",
+    obs: "Analisar recentes, criar lista, enviar para Narzi."
+  },
+  {
+    titulo: "Médico da Família — Clínico Geral como Porta de Entrada",
+    desc: "Priorizar atendimento ao Clínico Geral / Médico da Família. Incluir Pediatria (8 anos+), Ginecologia preventiva e Geriatria.",
+    resp: "Equipe / Maria Eliza",
+    prazo: "Recorrente",
+    status: "done", label: "✅ Concluído",
+    obs: "Incluir Pediatria (8 anos), Ginecologia extendida (preventivo) e Geriatria."
+  },
+  {
+    titulo: "Parceiros — White Label, Cartão de Benefícios, Consulta Avulsa",
+    desc: "Busca de novos parceiros: cartão de benefícios, clínicas compartilhadas (White Label), consultor venda consulta avulsa (comissão 10%).",
+    resp: "Bárbara Almeida",
+    prazo: "Recorrente",
+    status: "doing", label: "🔄 Em andamento",
+    obs: "Matropax em andamento. Ducash e DoutorAgora prospecção iniciada. Criar vídeos colab para divulgação de marca."
+  },
+  {
+    titulo: "TeleConsulta — Expansão e Parametrização",
+    desc: "Expansão de telemedicina (no-show inferior à presencial). Integração SOC + receita digital via MEMED.",
+    resp: "Bárbara",
+    prazo: "30/06/2026",
+    status: "doing", label: "🔄 Em andamento",
+    obs: "Integração com SOC da receita digital através da MEMED. Solicitada proposta 08/05. Chamado aberto 12/05."
+  },
+];
+
+const OCUP_PLAN = [
+  {
+    titulo: "Nina — Recepcionista Virtual (Evolution API)",
+    desc: "Criar app via Remix Nina API para interação com cliente: confirmação de consulta, NPS, gestão de atendimento e agendamento automatizado.",
+    resp: "Bárbara / Gabriel",
+    prazo: "30/06/2026",
+    status: "plan", label: "📌 Planejado",
+    obs: "Escopo do Projeto criado. Solicitar Comitê de Inovação suporte na realização do projeto."
+  },
+  {
+    titulo: "Busca de Novos Parceiros — Continuidade",
+    desc: "Ampliar base de parceiros com foco em cartões de benefícios e clínicas compartilhadas para aumentar volume de agendamentos.",
+    resp: "Bárbara Almeida",
+    prazo: "Recorrente",
+    status: "doing", label: "🔄 Em andamento",
+    obs: "Buscar novos para divulgação da marca. Vídeos Colab — Matropax em andamento. Ducash e DoutorAgora."
+  },
+];
+
+const CROSS_ALL = [
+  {
+    titulo: "Busca de Exames por Ficha — Com Apoio Claude IA",
+    desc: "Buscar nas fichas clínicas os exames solicitados pelos médicos para oferecer orçamento e agendamento facilitado ao paciente.",
+    resp: "Equipe AssisteMed / Bárbara (Claude)",
+    prazo: "Recorrente",
+    status: "doing", label: "🔄 Em andamento",
+    obs: "Criada lista para equipe com script de mensagem. Escalar para todos os médicos."
+  },
+  {
+    titulo: "Tabela de Preço — Revisão e Competitividade",
+    desc: "Preço atual está 65% abaixo do Lustosa e Pardini. Definir margem saudável considerando tempo de liberação 3x mais rápido que a concorrência.",
+    resp: "Bárbara",
+    prazo: "30/06/2026",
+    status: "doing", label: "🔄 Em andamento",
+    obs: "Conferir com Diretoria qual seria a margem saudável. Tempo de liberação é diferencial competitivo."
+  },
+  {
+    titulo: "Procedimentos com Médico da Família — Campanha Preventivo",
+    desc: "Criar campanha de check-up preventivo com agenda integrada ao Médico da Família. Lista retirada do SOC, contato inicial feito.",
+    resp: "Narzi",
+    prazo: "30/06/2026",
+    status: "doing", label: "🔄 Em andamento",
+    obs: "Lista retirada do SOC, contato feito com pacientes. Pegar status com equipe e programar recorrência mensal."
+  },
+  {
+    titulo: "Novo Produto — Linha de Obesidade",
+    desc: "Acompanhamento semanal + aplicação de medicamento + plano alimentar + bioimpedância + combo com exames (Dra. Kenia).",
+    resp: "Dra. Kenia / Bárbara",
+    prazo: "30/06/2026",
+    status: "doing", label: "🔄 Em andamento",
+    obs: "Criar plano de divulgação e precificação. Aguardando conclusão de obra para lançamento."
+  },
+];
+
+// ─── RENDER ───────────────────────────────────────────────────────────────
+function topBar(s){
+  return {done:'ctb-done',doing:'ctb-doing',plan:'ctb-plan',rec:'ctb-rec'}[s]||'ctb-plan'
+}
+function pillCls(s){
+  return {done:'pill-done',doing:'pill-doing',plan:'pill-plan',rec:'pill-rec'}[s]||'pill-plan'
+}
+
+function render(id, data){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = data.map(d=>`
+    <div class="card">
+      <div class="card-top-bar ${topBar(d.status)}"></div>
+      <div class="card-body">
+        <div class="card-head">
+          <div class="card-title">${d.titulo}</div>
+          <span class="pill ${pillCls(d.status)}">${d.label}</span>
+        </div>
+        <div class="card-desc">${d.desc}</div>
+      </div>
+      ${d.obs?`<div class="card-obs"><strong>💬 Obs / Próx. Passo</strong>${d.obs}</div>`:''}
+      <div class="card-foot">
+        <div class="cf-resp"><span>Resp: </span>${d.resp}</div>
+        <div class="cf-right">
+          <span class="cf-prio">🔴 Alta</span>
+          <span class="cf-date">📅 ${d.prazo}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+render('cv-ativas', VIDAS_ATIVAS);
+render('cv-plan',   VIDAS_PLAN);
+render('co-ativas', OCUP_ATIVAS);
+render('co-plan',   OCUP_PLAN);
+render('cx-all',    CROSS_ALL);
+
+// ─── NAV ──────────────────────────────────────────────────────────────────
+function go(id, tab){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  tab.classList.add('on');
+}
+</script>
+</body>
+</html>
