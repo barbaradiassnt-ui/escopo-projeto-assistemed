@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escopo de Projeto · AssisteMed</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1A2332;
+    --navy-mid: #243044;
+    --navy-light: #2E3D55;
+    --lime: #B8D432;
+    --white: #FFFFFF;
+    --gray: #8A92A0;
+    --gray-light: #EEF0F4;
+    --text-muted: rgba(255,255,255,0.75);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; }
+
+  /* HERO */
+  .hero { background: var(--navy); padding: 72px 40px 56px; max-width: 960px; margin: 0 auto; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(184,212,50,0.15); border: 1px solid rgba(184,212,50,0.35);
+    color: var(--lime); font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 28px;
+  }
+  .badge::before {
+    content: ''; width: 6px; height: 6px; background: var(--lime); border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+  .hero h1 { font-size: clamp(28px,5vw,46px); font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
+  .hero h1 span { color: var(--lime); }
+  .hero-sub { font-size: 15px; color: var(--gray); line-height: 1.7; max-width: 600px; margin-bottom: 40px; }
+  .hero-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--gray); font-weight: 600; }
+  .meta-val { font-size: 14px; font-weight: 500; }
+  .divider-lime { width: 100%; height: 2px; background: linear-gradient(90deg, var(--lime) 0%, transparent 70%); }
+
+  /* NAV */
+  nav { background: var(--navy-mid); border-bottom: 1px solid rgba(255,255,255,0.07); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 960px; margin: 0 auto; padding: 0 40px; display: flex; overflow-x: auto; }
+  .nav-inner a {
+    text-decoration: none; color: var(--gray); font-size: 13px; font-weight: 500;
+    padding: 14px 16px; white-space: nowrap; border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .nav-inner a:hover { color: var(--white); border-color: var(--lime); }
+
+  /* MAIN */
+  main { max-width: 960px; margin: 0 auto; padding: 0 40px 80px; }
+  .section { padding: 56px 0 0; }
+  .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .section-num {
+    width: 36px; height: 36px; background: rgba(184,212,50,0.12); border: 1px solid rgba(184,212,50,0.3);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--lime); flex-shrink: 0;
+  }
+  .section-title { font-size: 20px; font-weight: 600; }
+
+  /* CARD */
+  .card { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 24px 28px; margin-bottom: 16px; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  /* BULLETS */
+  .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .bullet-list li { display: flex; gap: 12px; font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+  .bullet-list li::before { content: ''; width: 6px; height: 6px; background: var(--lime); border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+
+  /* MODULES */
+  .module { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+  .module-header { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .module-tag { font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--navy); background: var(--lime); padding: 3px 10px; border-radius: 4px; flex-shrink: 0; }
+  .module-tag.novo::after { content: ' ★'; }
+  .module-title { font-size: 15px; font-weight: 600; }
+  .module-body { padding: 20px 24px; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: rgba(184,212,50,0.1); }
+  thead th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); border-bottom: 1px solid rgba(184,212,50,0.25); white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  tbody td { padding: 12px 16px; color: var(--text-muted); line-height: 1.5; vertical-align: top; }
+  tbody td:first-child { color: var(--white); font-weight: 500; }
+  .total td { color: var(--lime) !important; font-weight: 700 !important; }
+  .compare .yes { color: #6EE7B7; }
+  .compare .no { color: rgba(255,255,255,0.3); }
+  .compare .partial { color: #FCD34D; }
+
+  /* COST */
+  .cost-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .cost-box { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 24px; }
+  .cost-box.highlight { border-color: rgba(184,212,50,0.3); background: rgba(184,212,50,0.06); }
+  .cost-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--gray); font-weight: 600; margin-bottom: 8px; }
+  .cost-value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .cost-value span { font-size: 15px; font-weight: 400; color: var(--gray); }
+  .cost-sub { font-size: 12px; color: var(--gray); }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 72px 1fr; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; padding-top: 18px; }
+  .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--lime); border: 2px solid var(--lime); flex-shrink: 0; }
+  .tl-line { width: 2px; flex: 1; background: rgba(255,255,255,0.07); margin: 4px 0; }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-right { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 16px 20px; margin: 6px 0 6px 16px; }
+  .tl-week { font-size: 11px; font-weight: 700; color: var(--lime); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+  .tl-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .tl-note { font-size: 12px; color: var(--gray); }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 16px; align-items: flex-start; background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 16px 20px; }
+  .step-num { width: 28px; height: 28px; background: var(--lime); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--navy); flex-shrink: 0; }
+  .step-text { font-size: 14px; color: var(--text-muted); line-height: 1.55; padding-top: 3px; }
+
+  /* OUT LIST */
+  .out-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .out-list li { display: flex; gap: 12px; font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.55; }
+  .out-list li::before { content: '—'; color: var(--gray); flex-shrink: 0; }
+
+  /* CONTEXT */
+  .context-box { background: rgba(184,212,50,0.06); border: 1px solid rgba(184,212,50,0.2); border-radius: 12px; padding: 24px 28px; margin-top: 16px; }
+  .context-box p { font-size: 14px; color: var(--text-muted); line-height: 1.75; margin-bottom: 10px; }
+  .context-box p:last-child { margin-bottom: 0; }
+
+  /* COLUNA LABEL */
+  .col-label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; margin-bottom: 12px; }
+  .col-label.lime { color: var(--lime); }
+  .col-label.gray { color: var(--gray); }
+
+  /* FOOTER */
+  footer { background: var(--navy-mid); border-top: 1px solid rgba(255,255,255,0.07); padding: 32px 40px; text-align: center; }
+  footer p { font-size: 13px; color: var(--gray); }
+  footer strong { color: rgba(255,255,255,0.6); }
+
+  /* TAG NOVO */
+  .tag-novo { display: inline-block; font-size: 10px; font-weight: 700; background: rgba(184,212,50,0.15); color: var(--lime); border: 1px solid rgba(184,212,50,0.3); padding: 1px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 48px 20px 40px; }
+    main { padding: 0 20px 60px; }
+    .card-grid, .cost-hero { grid-template-columns: 1fr; }
+    .nav-inner { padding: 0 20px; }
+    footer { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">Escopo de Projeto · v2.0</div>
+  <h1>Sistema de Atendimento<br>Unificado via <span>WhatsApp</span></h1>
+  <p class="hero-sub">Centralização do atendimento com IA, agendamento integrado ao SOC e gestão humana em tempo real para toda a rede AssisteMed.</p>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="meta-label">Organização</span>
+      <span class="meta-val">AssisteMed / Grupo Ocupacional</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Responsável</span>
+      <span class="meta-val">Bárbara Almeida — Coordenadora Administrativa</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Versão</span>
+      <span class="meta-val">2.0 · Junho de 2026</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Inclui</span>
+      <span class="meta-val">Agendamento integrado ao SOC</span>
+    </div>
+  </div>
+</div>
+<div class="divider-lime"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#visao">Visão geral</a>
+    <a href="#arquitetura">Arquitetura</a>
+    <a href="#modulos">Módulos</a>
+    <a href="#cronograma">Cronograma</a>
+    <a href="#investimento">Investimento</a>
+    <a href="#fora">Fora do escopo</a>
+    <a href="#premissas">Premissas</a>
+    <a href="#proximos">Próximos passos</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- 1. VISÃO GERAL -->
+  <section class="section" id="visao">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2 class="section-title">Visão geral do projeto</h2>
+    </div>
+    <div class="card">
+      <p style="font-size:14px;color:var(--text-muted);line-height:1.75;margin-bottom:24px;">
+        Este documento descreve o escopo de desenvolvimento do sistema de atendimento unificado via WhatsApp da AssisteMed / Grupo Ocupacional. O objetivo é centralizar toda a comunicação com pacientes em um único número, com atendimento automático por inteligência artificial, agendamento integrado ao sistema SOC, handoff para equipe humana e automações de confirmação e pesquisa de satisfação.
+      </p>
+      <div class="card-grid">
+        <div>
+          <p class="col-label gray">Problema atual</p>
+          <ul class="bullet-list">
+            <li>Atendimento descentralizado entre atendentes</li>
+            <li>Pacientes sem resposta imediata — grande fluxo e fora do horário de expediente</li>
+            <li>Agendamento limitado a equipe reduzida</li>
+            <li>Sem histórico centralizado de conversas</li>
+            <li>Confirmações e NPS realizados manualmente pela equipe</li>
+          </ul>
+        </div>
+        <div>
+          <p class="col-label lime">Solução proposta</p>
+          <ul class="bullet-list">
+            <li>Um único número de WhatsApp para toda a rede AssisteMed</li>
+            <li>IA treinável responde automaticamente perguntas frequentes</li>
+            <li>Paciente agenda, reagenda e cancela consultas diretamente pelo WhatsApp, com dados gravados no SOC em tempo real</li>
+            <li>Confirmação automática D-1 integrada ao SOC — sem exportação manual</li>
+            <li>Equipe de 4+ atendentes vê e assume conversas em tempo real</li>
+            <li>NPS disparado automaticamente após cada atendimento realizado</li>
+            <li>Histórico completo de cada paciente armazenado no Supabase</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ARQUITETURA -->
+  <section class="section" id="arquitetura">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2 class="section-title">Arquitetura técnica</h2>
+    </div>
+    <div class="card table-wrap" style="padding:0;overflow:hidden;">
+      <table>
+        <thead>
+          <tr><th>Camada</th><th>Ferramenta</th><th>Função</th><th>Observação</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Canal de entrada</td><td>WhatsApp Business API (Meta Cloud)</td><td>Número único oficial</td><td>Sem risco de ban</td></tr>
+          <tr><td>Roteamento</td><td>n8n (self-hosted)</td><td>Decide IA, agendamento ou humano</td><td>Open source</td></tr>
+          <tr><td>IA de atendimento</td><td>Claude API (Sonnet)</td><td>Respostas e fluxo de agendamento</td><td>Treinável por prompt</td></tr>
+          <tr><td>Agendamento</td><td>API do SOC</td><td>Consulta, cria e cancela agendas</td><td>API já disponível</td></tr>
+          <tr><td>Painel da equipe</td><td>Chatwoot</td><td>Gestão de conversas</td><td>Open source, multi-agente</td></tr>
+          <tr><td>Automações</td><td>n8n agendado</td><td>Confirmações D-1 e NPS</td><td>Integrado ao SOC</td></tr>
+          <tr><td>Banco de dados</td><td>Supabase (já existente)</td><td>Histórico e registros NPS</td><td>Reaproveitado do GestorMed</td></tr>
+          <tr><td>Hospedagem</td><td>Railway</td><td>Servidor 24h</td><td>~R$ 100/mês</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <p class="col-label lime" style="margin-bottom:14px;">Fluxo de agendamento via WhatsApp</p>
+      <ul class="bullet-list">
+        <li>Paciente envia mensagem solicitando consulta</li>
+        <li>IA solicita CPF e valida o cadastro via API do SOC</li>
+        <li>IA consulta horários disponíveis em tempo real no SOC e apresenta as opções</li>
+        <li>Paciente escolhe o horário — IA confirma e grava o agendamento no SOC</li>
+        <li>Para reagendamento: IA localiza o agendamento ativo, cancela o anterior e cria o novo</li>
+        <li>Para cancelamento: IA confirma a intenção e cancela diretamente no SOC</li>
+        <li>Toda operação reflete em tempo real na agenda da unidade, sem intervenção manual</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. MÓDULOS -->
+  <section class="section" id="modulos">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2 class="section-title">Escopo de desenvolvimento</h2>
+    </div>
+
+    <div class="module">
+      <div class="module-header">
+        <span class="module-tag">Módulo 1</span>
+        <span class="module-title">Infraestrutura e integração (WhatsApp + Chatwoot)</span>
+      </div>
+      <div class="module-body">
+        <ul class="bullet-list">
+          <li>Solicitação e aprovação do acesso à Meta Cloud API</li>
+          <li>Configuração do número oficial de WhatsApp Business</li>
+          <li>Instalação e configuração do Chatwoot no Railway</li>
+          <li>Instalação e configuração do n8n no Railway</li>
+          <li>Integração webhook: WhatsApp ↔ n8n ↔ Chatwoot</li>
+          <li>Teste de fluxo completo de mensagem entrada → painel</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-header">
+        <span class="module-tag">Módulo 2</span>
+        <span class="module-title">IA de atendimento</span>
+      </div>
+      <div class="module-body">
+        <ul class="bullet-list">
+          <li>Configuração da Claude API com prompt base da AssisteMed</li>
+          <li>Construção da base de conhecimento: horários, unidades, especialidades, dúvidas frequentes</li>
+          <li>Regras de ativação: quando a IA responde, quando aciona agendamento, quando encaminha para humano</li>
+          <li>Interface simples para a equipe atualizar a base de conhecimento sem código</li>
+          <li>Testes com cenários reais de atendimento</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-header">
+        <span class="module-tag novo">Módulo 3</span>
+        <span class="module-title">Agendamento integrado ao SOC</span>
+      </div>
+      <div class="module-body">
+        <ul class="bullet-list">
+          <li>Mapeamento dos endpoints da API do SOC: consulta de agenda, criação, edição e cancelamento</li>
+          <li>Fluxo conversacional de agendamento: IA guia o paciente passo a passo pelo WhatsApp</li>
+          <li>Validação de CPF e dados do paciente antes de qualquer operação na agenda</li>
+          <li>Consulta de horários disponíveis por unidade e especialidade em tempo real</li>
+          <li>Gravação do agendamento diretamente no SOC ao fim do fluxo</li>
+          <li>Fluxo de reagendamento: cancelamento do horário anterior + criação do novo em sequência</li>
+          <li>Fluxo de cancelamento com confirmação explícita do paciente antes de executar</li>
+          <li>Tratamento de erros: agenda lotada, paciente não encontrado, horário indisponível</li>
+          <li>Confirmação automática D-1 consultando agenda do SOC — sem exportação manual</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-header">
+        <span class="module-tag">Módulo 4</span>
+        <span class="module-title">Painel de gestão da equipe</span>
+      </div>
+      <div class="module-body">
+        <ul class="bullet-list">
+          <li>Configuração de 4+ agentes no Chatwoot</li>
+          <li>Organização por filas: unidade Lourdes, Centro-BH, Eldorado</li>
+          <li>Regras de handoff: agente assume conversa com 1 clique</li>
+          <li>Histórico completo visível: o que a IA disse e operações de agendamento realizadas</li>
+          <li>Notificações para a equipe quando paciente está aguardando</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-header">
+        <span class="module-tag">Módulo 5</span>
+        <span class="module-title">Automações</span>
+      </div>
+      <div class="module-body">
+        <ul class="bullet-list">
+          <li>Confirmação D-1: consulta agenda do SOC e dispara mensagem ao paciente</li>
+          <li>Pesquisa NPS: disparo automático 2h após atendimento realizado</li>
+          <li>Registro das respostas NPS no Supabase</li>
+          <li>Dashboard simples de NPS por unidade e período</li>
+          <li>Estrutura para campanhas comerciais segmentadas (templates aprovados pelo Meta)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-header">
+        <span class="module-tag">Módulo 6</span>
+        <span class="module-title">Treinamento e entrega</span>
+      </div>
+      <div class="module-body">
+        <ul class="bullet-list">
+          <li>Manual de uso para a equipe (PDF)</li>
+          <li>Treinamento prático com as atendentes — 1 sessão online (~2h)</li>
+          <li>30 dias de suporte pós-entrega para ajustes</li>
+          <li>Documentação técnica para manutenção futura</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CRONOGRAMA -->
+  <section class="section" id="cronograma">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2 class="section-title">Cronograma estimado</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-week">Semana 1</div>
+          <div class="tl-title">Infraestrutura + integração WhatsApp/Chatwoot</div>
+          <div class="tl-note">Depende aprovação Meta (~3 dias)</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-week">Semana 2</div>
+          <div class="tl-title">IA configurada + base de conhecimento inicial</div>
+          <div class="tl-note">AssisteMed fornece conteúdo</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-week">Semanas 3–4</div>
+          <div class="tl-title">Agendamento integrado ao SOC (Módulo 3)</div>
+          <div class="tl-note">Módulo mais complexo do projeto</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-week">Semana 5</div>
+          <div class="tl-title">Painel da equipe + agentes + automações</div>
+          <div class="tl-note">Revisão com Bárbara</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-week">Semana 6</div>
+          <div class="tl-title">Confirmação D-1 via SOC + NPS automático</div>
+          <div class="tl-note">Integração com agenda real</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-week">Semana 7</div>
+          <div class="tl-title">Testes integrados + ajustes + treinamento</div>
+          <div class="tl-note">Go-live ao final da semana</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-right">
+          <div class="tl-week">Semanas 8–11</div>
+          <div class="tl-title">Suporte pós-entrega e ajustes finos</div>
+          <div class="tl-note">30 dias de suporte incluso</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. INVESTIMENTO -->
+  <section class="section" id="investimento">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2 class="section-title">Investimento</h2>
+    </div>
+
+    <div class="cost-hero">
+      <div class="cost-box highlight">
+        <div class="cost-label">Desenvolvimento (custo único)</div>
+        <div class="cost-value">R$ 5.100 <span>– 8.100</span></div>
+        <div class="cost-sub">Negociável por pacote · 7 semanas</div>
+      </div>
+      <div class="cost-box">
+        <div class="cost-label">Operação mensal recorrente</div>
+        <div class="cost-value">R$ 240 <span>– 570</span></div>
+        <div class="cost-sub">Infraestrutura + IA + WhatsApp API</div>
+      </div>
+    </div>
+
+    <p class="col-label gray" style="margin-bottom:12px;">Desenvolvimento (custo único)</p>
+    <div class="card table-wrap" style="padding:0;overflow:hidden;margin-bottom:24px;">
+      <table>
+        <thead><tr><th>Item</th><th>Faixa de mercado</th><th>Observação</th></tr></thead>
+        <tbody>
+          <tr><td>Módulo 1 — Infraestrutura e integração</td><td>R$ 800–1.200</td><td></td></tr>
+          <tr><td>Módulo 2 — IA de atendimento</td><td>R$ 900–1.500</td><td>Inclui base de conhecimento</td></tr>
+          <tr><td>Módulo 3 — Agendamento integrado SOC <span class="tag-novo">★ novo</span></td><td>R$ 1.800–2.800</td><td>Módulo mais complexo</td></tr>
+          <tr><td>Módulo 4 — Painel da equipe</td><td>R$ 600–900</td><td></td></tr>
+          <tr><td>Módulo 5 — Automações</td><td>R$ 700–1.200</td><td>Confirmação SOC + NPS</td></tr>
+          <tr><td>Módulo 6 — Treinamento e documentação</td><td>R$ 300–500</td><td></td></tr>
+          <tr class="total"><td>TOTAL DESENVOLVIMENTO</td><td>R$ 5.100–8.100</td><td>Negociável por pacote</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="col-label gray" style="margin-bottom:12px;">Comparativo: v1.0 vs v2.0 (com SOC)</p>
+    <div class="card table-wrap" style="padding:0;overflow:hidden;margin-bottom:24px;">
+      <table class="compare">
+        <thead><tr><th>Item</th><th>v1.0 (sem agendamento)</th><th>v2.0 (com SOC)</th></tr></thead>
+        <tbody>
+          <tr><td>Desenvolvimento</td><td>R$ 3.300–5.300</td><td>R$ 5.100–8.100</td></tr>
+          <tr><td>Custo recorrente/mês</td><td>R$ 240–570</td><td class="yes">R$ 240–570 (igual)</td></tr>
+          <tr><td>Prazo de entrega</td><td>5 semanas</td><td>7 semanas</td></tr>
+          <tr><td>Agendamento 24h pelo WhatsApp</td><td class="no">Não</td><td class="yes">Sim</td></tr>
+          <tr><td>Gravação automática no SOC</td><td class="no">Não</td><td class="yes">Sim</td></tr>
+          <tr><td>Confirmação D-1 integrada</td><td class="partial">Parcial (exportação)</td><td class="yes">Sim (tempo real)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="col-label gray" style="margin-bottom:12px;">Custos mensais recorrentes (operação)</p>
+    <div class="card table-wrap" style="padding:0;overflow:hidden;margin-bottom:16px;">
+      <table>
+        <thead><tr><th>Item</th><th>Mínimo</th><th>Máximo</th><th>Observação</th></tr></thead>
+        <tbody>
+          <tr><td>WhatsApp Business API (Meta)</td><td>R$ 100</td><td>R$ 300</td><td>Por volume de mensagens ativas</td></tr>
+          <tr><td>Servidor Railway</td><td>R$ 90</td><td>R$ 120</td><td>Chatwoot + n8n</td></tr>
+          <tr><td>IA — Claude API</td><td>R$ 50</td><td>R$ 150</td><td>Por volume de mensagens</td></tr>
+          <tr><td>Supabase</td><td>R$ 0</td><td>R$ 0</td><td>Já existente no GestorMed</td></tr>
+          <tr><td>Chatwoot + n8n</td><td>R$ 0</td><td>R$ 0</td><td>Open source</td></tr>
+          <tr><td>API do SOC</td><td>R$ 0</td><td>R$ 0</td><td>Incluso no contrato existente</td></tr>
+          <tr class="total"><td>TOTAL RECORRENTE</td><td>R$ 240</td><td>R$ 570</td><td>Estimativa mensal</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="context-box">
+      <p>Uma atendente CLT em Belo Horizonte custa entre R$ 2.500 e R$ 3.500/mês em salário, mais encargos trabalhistas de aproximadamente 70%, totalizando entre R$ 4.250 e R$ 5.950/mês por colaboradora — sem contar ausências, férias e rotatividade.</p>
+      <p>O sistema proposto opera 24 horas por dia, 7 dias por semana, agenda consultas de forma autônoma e integrada ao SOC, com custo recorrente de <strong style="color:var(--lime)">R$ 240–570/mês</strong>. O investimento de desenvolvimento se paga em menos de 2 meses de operação.</p>
+    </div>
+  </section>
+
+  <!-- 6. FORA DO ESCOPO -->
+  <section class="section" id="fora">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2 class="section-title">O que está fora deste escopo</h2>
+    </div>
+    <div class="card">
+      <ul class="out-list">
+        <li>Desenvolvimento de aplicativo mobile</li>
+        <li>Integração com sistemas além do SOC (prontuário eletrônico, faturamento etc.) — pode ser módulo futuro</li>
+        <li>Criação dos templates de mensagem junto ao Meta (responsabilidade da AssisteMed após orientação)</li>
+        <li>Gestão contínua da base de conhecimento da IA após entrega — responsabilidade da equipe interna</li>
+        <li>Atendimento multicanal além do WhatsApp (e-mail, Instagram etc.) — pode ser escopo futuro</li>
+        <li>Modificações na API do SOC ou em seu banco de dados</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7. PREMISSAS -->
+  <section class="section" id="premissas">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2 class="section-title">Premissas e dependências</h2>
+    </div>
+    <div class="card">
+      <ul class="bullet-list">
+        <li>AssisteMed confirma que a API do SOC está disponível e fornece credenciais de acesso ao desenvolvedor</li>
+        <li>Documentação da API do SOC (endpoints, autenticação, formato de dados) será disponibilizada na semana 1</li>
+        <li>AssisteMed fornece conteúdo para a base de conhecimento da IA nas primeiras duas semanas</li>
+        <li>Acesso ao Supabase existente (projeto GestorMed) será disponibilizado ao desenvolvedor</li>
+        <li>Aprovação da Meta Cloud API pode levar entre 3 e 7 dias úteis — recomenda-se solicitar imediatamente</li>
+        <li>Equipe estará disponível para sessão de treinamento na semana 7</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8. PRÓXIMOS PASSOS -->
+  <section class="section" id="proximos">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2 class="section-title">Próximos passos</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-text">Verificar com o SOC a documentação completa da API (endpoints de agenda disponíveis)</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text">Compartilhar este documento com o desenvolvedor para receber proposta formal</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text">Solicitar acesso à Meta Cloud API — processo pode ser iniciado imediatamente em paralelo</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text">Definir responsável interno pela curadoria da base de conhecimento da IA</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-text">Alinhar com a diretoria o orçamento aprovado para desenvolvimento</div></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Elaborado por <strong>Bárbara Almeida — Coordenadora Administrativa</strong> · AssisteMed / Grupo Ocupacional · Junho de 2026 · v2.0</p>
+  <p style="margin-top:8px;">Documento confidencial · Uso interno</p>
+</footer>
+
+</body>
+</html>
